@@ -5,6 +5,16 @@ import (
   "html/template"
 )
 
+const (
+  AUTH_USER = "User"
+  AUTH_PW = "Password1"
+)
+
+var (
+  auth_success = false
+)
+
+
 // render login if get request, otherwise hand off to perform authentication
 func loginHandler(w http.ResponseWriter, r *http.Request) {
   if r.Method == "GET" {

@@ -6,16 +6,6 @@ import (
   "net/http"
 )
 
-const (
-  AUTH_USER = "User"
-  AUTH_PW = "Password1"
-)
-
-var (
-  auth_success = false
-)
-
-
 func main() {
 
   // initialize router
