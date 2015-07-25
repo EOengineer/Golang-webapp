@@ -13,14 +13,14 @@ type Service struct {
 
 // service index
 func servicesHandler(w http.ResponseWriter, r *http.Request) {
-  enforcer(w, r, auth_success)
+  enforcer(w, r, authenticated)
   t, _ := template.ParseFiles("views/services/index.html")
   t.Execute(w, nil)
 }
 
 // service show
 func serviceHandler(w http.ResponseWriter, r *http.Request) {
-  enforcer(w, r, auth_success)
+  enforcer(w, r, authenticated)
   vars := mux.Vars(r)
   s := &Service{Name: vars["name"]}
   t, _ := template.ParseFiles("views/services/show.html")

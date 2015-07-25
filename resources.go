@@ -13,7 +13,7 @@ type Resource struct {
 
 // resource index
 func resourcesHandler(w http.ResponseWriter, r *http.Request) {
-  enforcer(w, r, auth_success)
+  enforcer(w, r, authenticated)
   vars := mux.Vars(r)
   s := &Service{Name: vars["s_name"]}
   t, _ := template.ParseFiles("views/resources/index.html")
@@ -22,7 +22,7 @@ func resourcesHandler(w http.ResponseWriter, r *http.Request) {
 
 // resource new
 func newResourceHandler(w http.ResponseWriter, r *http.Request) {
-  enforcer(w, r, auth_success)
+  enforcer(w, r, authenticated)
   t, _ := template.ParseFiles("views/resources/new.html")
   t.Execute(w, nil)
 }

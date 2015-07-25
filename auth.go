@@ -11,7 +11,7 @@ const (
 )
 
 var (
-  auth_success = false
+  authenticated = false
 )
 
 
@@ -27,8 +27,8 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 
 // logout
 func logoutHandler(w http.ResponseWriter, r *http.Request) {
-  auth_success = false
-  enforcer(w, r, auth_success)
+  authenticated = false
+  enforcer(w, r, authenticated)
 }
 
 // eventually modify this method to call out to authentication service
@@ -36,10 +36,10 @@ func authCheck(w http.ResponseWriter, r *http.Request) {
   user := r.FormValue("username")
   pw := r.FormValue("password")
   if (pw == AUTH_PW) && (user == AUTH_USER) {
-    auth_success = true
+    authenticated = true
     http.Redirect(w, r, "/services", http.StatusFound)
   } else {
-    enforcer(w, r, auth_success)
+    enforcer(w, r, authenticated)
   }
 }
 
