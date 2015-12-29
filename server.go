@@ -8,6 +8,9 @@ import (
 
 func main() {
 
+  // database
+
+
   // initialize router
   rtr := mux.NewRouter()
   http.Handle("/", rtr)
@@ -19,6 +22,8 @@ func main() {
   rtr.HandleFunc("/services/{name}", serviceHandler)
   rtr.HandleFunc("/services/{s_name}/resources", resourcesHandler)
   rtr.HandleFunc("/services/{s_name}/resources/new", newResourceHandler)
+  rtr.HandleFunc("/users", usersHandler)
+  rtr.HandleFunc("/users/{uid}", userHandler)
 
   // some server feedback
   log.Println("Listening...")
