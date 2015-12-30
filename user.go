@@ -8,6 +8,7 @@ import (
   "html/template"
   "database/sql"
   _ "github.com/lib/pq"
+  "github.com/gorilla/mux"
 )
 
 const (
@@ -60,30 +61,39 @@ func usersHandler(resp http.ResponseWriter, req *http.Request) {
 
 
 func userHandler(resp http.ResponseWriter, req *http.Request) {
-  enforcer(w, r, authenticated)
+  enforcer(resp, req, authenticated)
 
-  vars := mux.Vars(r)
+  // get the query string parameters
+  vars := mux.Vars(req)
   // get the id
   uid := vars["uid"]
 
+
+  // open the database connection
   db, err := sql.Open("postgres", db_config)
   if err != nil {
     log.Fatal(err)
   }
 
   // interpolate and run the query
-  rows, err := db.Query("SELECT * FROM users WHERE uid = $1", uid)
+  row := db.QueryRow("SELECT * FROM users WHERE Uid = $1", uid)
   if err != nil {
     log.Fatal(err)
   }
+
+  // initialize the struct
+  RetreivedUser := &User{}
+
+
+  // coerse database results to user struct
+  err = row.Scan(&RetreivedUser.Uid, &RetreivedUser.Username, &RetreivedUser.Created)
+  if err != nil {
+    log.Fatal(err)
+  }
+
+  t, _ := template.ParseFiles("views/users/show.html")
+  t.Execute(resp, &RetreivedUser)
+
+
 }
 
-// some code to insert the data into the view
-
-// func serviceHandler(w http.ResponseWriter, r *http.Request) {
-//   enforcer(w, r, authenticated)
-//   vars := mux.Vars(r)
-//   s := &Service{Name: vars["name"]}
-//   t, _ := template.ParseFiles("views/services/show.html")
-//   t.Execute(w, s)
-// }
